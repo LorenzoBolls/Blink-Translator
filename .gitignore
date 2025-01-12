@@ -1,0 +1,38 @@
+# macOS system files
+.DS_Store
+.localized
+.Trash/
+.CFUserTextEncoding
+
+# User-specific files and directories
+.bash_history
+.zsh_history
+.zprofile
+.zsh_sessions/
+.viminfo
+.emacs
+.emacs.d/
+.idlerc/
+.expo/
+.cache/
+.npm/
+.ssh/
+.matplotlib/
+.python_history
+.vscode/
+.config/
+
+# Common directories
+Applications/
+Documents/
+Downloads/
+Movies/
+Music/
+Pictures/
+Public/
+Library/
+
+# Temporary or backup files
+*.tmp
+*.swp
+*~
