@@ -3,11 +3,17 @@ import cvzone
 from cvzone.FaceMeshModule import FaceMeshDetector
 from cvzone.PlotModule import LivePlot
 import time
+import pyttsx3
 
 # Initialize video capture and FaceMesh detector
 cap = cv2.VideoCapture(0)
 detector = FaceMeshDetector(maxFaces=1)
 plotY = LivePlot(640, 360, [20, 50], invert=True)
+
+# Initialize the TTS engine
+tts_engine = pyttsx3.init()
+tts_engine.setProperty('rate', 150)  # Speed of speech
+tts_engine.setProperty('volume', 0.9)  # Volume level (0.0 to 1.0)
 
 # Define the Morse code dictionary
 morse_code_dict = {
@@ -40,17 +46,22 @@ eyes_closed = False  # Flag to check if the eyes are closed
 is_building_word = False  # Flag to indicate if we are building a word
 current_word = []  # List to store letters for the current word
 
+
 def record_blink(start_time):
     global blink_duration, blinks, is_building_word, current_word
     blink_duration = (time.time() - start_time) * 1000  # Duration in milliseconds
     print(f"Blink Duration: {blink_duration} ms")  # Debugging information
 
-    if blink_duration >= start_stop_threshold:  # Long blink (4000 ms) to start/stop a word
+    if blink_duration >= start_stop_threshold:  # Long blink (3000 ms) to start/stop a word
         if is_building_word:
             # End word building, decode word and reset
             final_word = ''.join(current_word)
             print(f"Final Word: {final_word}")
             current_word = []  # Clear the word list for the next word
+
+            # Speak the final word
+            tts_engine.say(final_word)
+            tts_engine.runAndWait()
         else:
             print("Starting a new word...")
         is_building_word = not is_building_word  # Toggle word-building mode
@@ -65,6 +76,7 @@ def record_blink(start_time):
     
     blink_start_time = None
 
+
 def morse_to_text(morse_code):
     inverted_dict = {value: key for key, value in morse_code_dict.items()}
     words = morse_code.strip().split(' / ')
@@ -75,6 +87,7 @@ def morse_to_text(morse_code):
             decoded_message += inverted_dict.get(char, '?')
         decoded_message += ' '
     return decoded_message.strip()
+
 
 while True:
     if cap.get(cv2.CAP_PROP_POS_FRAMES) == cap.get(cv2.CAP_PROP_FRAME_COUNT):
@@ -127,6 +140,11 @@ while True:
                 decoded_letter = morse_to_text(morse_code)
                 print(f"Decoded Letter: {decoded_letter}")
                 current_word.append(decoded_letter)  # Add the decoded letter to the current word
+
+                # Speak the decoded letter
+                tts_engine.say(decoded_letter)
+                tts_engine.runAndWait()
+
                 blinks = []  # Clear the list for the next letter
             last_blink_time = None  # Reset after decoding
 
