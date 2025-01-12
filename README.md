@@ -1,44 +1,42 @@
 # Blink Translator App
 
 ## Overview
-The Blink Translator App is a **Computer Vision application** designed to assist individuals with paralysis in translating **blinks** into **Morse code** and subsequently into **alphanumeric letters**. By using real-time video feed from a webcam, the app detects eye blinks, calculates blink durations, and converts them into meaningful text.
-
-This project aims to provide a communication method for paralyzed individuals, empowering them to express themselves effectively.
+The Blink Translator App is a **Computer Vision application** designed to assist individuals with paralysis by translating **blinks** into **Morse code** and then into **alphanumeric characters**. Using real-time video from a webcam, the app detects eye blinks, calculates their duration, and converts them into meaningful text. This innovative tool empowers users to communicate effectively, offering a new level of independence.
 
 ---
 
 ## Features
 - **Blink-to-Morse Code Translation**: Converts detected blinks into Morse code using precise timing thresholds.
-- **Real-Time Feedback**: Provides graphical feedback to visualize blinks, reducing user error and improving confidence.
 - **Morse-to-Alphanumeric Conversion**: Decodes Morse code into readable letters and words for effective communication.
-- **FaceMesh Detector Integration**: Utilizes advanced facial landmark detection to track eye movements with high accuracy.
+- **Real-Time Graphical Feedback**: Displays blink activity visually to reduce user errors and enhance confidence.
+- **FaceMesh Integration**: Tracks and analyzes facial landmarks to detect eye blinks with high accuracy.
+- **Text-to-Speech (TTS)**: Converts decoded text into speech for auditory feedback.
 
 ---
 
 ## Key Technologies
 - **OpenCV**: For video processing and facial feature detection.
-- **cvzone**: To enhance visual feedback and interface usability.
+- **cvzone**: Enhances visual feedback and simplifies interface design.
 - **Python**: Core programming language for implementing logic and algorithms.
-- **FaceMesh Detector**: Tracks and analyzes facial landmarks to detect eye blinks.
+- **FaceMesh Detector**: Tracks facial landmarks to identify eye movements.
+- **pyttsx3**: Provides offline text-to-speech functionality.
 
 ---
 
 ## How It Works
-1. **Video Feed**: The application captures real-time video from a webcam.
-2. **Eye Tracking**: The FaceMesh detector identifies key facial landmarks around the eyes.
-3. **Blink Detection**: Blink durations are measured and categorized into:
-   - **Dots (.)** for short blinks.
-   - **Dashes (-)** for longer blinks.
-   - **Word breaks** for very long blinks.
-4. **Morse Code Conversion**:
-   - Blinks are translated into Morse code sequences.
-   - Morse code is converted into alphanumeric characters using a predefined dictionary.
-5. **Graphical Feedback**:
-   - Blink activity is displayed in real-time to ensure accuracy and reduce errors.
+1. **Video Feed**: Captures real-time video from a webcam.
+2. **Eye Tracking**: Uses FaceMesh to identify key facial landmarks around the eyes.
+3. **Blink Detection**: Classifies blink durations into:
+   - **Short Blink**: Represents a dot (`.`).
+   - **Long Blink**: Represents a dash (`-`).
+   - **Very Long Blink**: Indicates a word break.
+4. **Morse Code Conversion**: Blinks are translated into Morse code and decoded into letters using a predefined dictionary.
+5. **Text-to-Speech Feedback**: Decoded letters and complete words are announced audibly using TTS.
 
 ---
 
 ## Setup and Installation
+
 ### Prerequisites
 - Python 3.x
 - Webcam-enabled device
@@ -46,7 +44,7 @@ This project aims to provide a communication method for paralyzed individuals, e
 ### Dependencies
 Install the required Python libraries:
 ```bash
-pip install opencv-python cvzone
+pip install opencv-python cvzone pyttsx3
 ```
 
 ### Running the Application
@@ -75,9 +73,9 @@ pip install opencv-python cvzone
      - **Long Blink**: Dash (`-`)
      - **Very Long Blink**: Word break
 3. **Graphical Feedback**:
-   - The app displays real-time blink activity to guide your inputs.
-4. **Decoding**:
-   - The app decodes Morse code into alphanumeric letters and words, displaying the results in the console.
+   - The app displays real-time blink activity on the screen to guide your inputs.
+4. **Listen to Output**:
+   - The application audibly announces each decoded letter and the final word.
 
 ---
 
@@ -89,10 +87,17 @@ pip install opencv-python cvzone
 
 ---
 
+## Demo
+[![Blink Translator Demo](https://i.imgur.com/r6WR4db.png)](https://www.youtube.com/watch?v=vT8nqBtlH10)
+
+Click the thumbnail above or watch the full video on YouTube: [Blink Translator Demo](https://www.youtube.com/watch?v=vT8nqBtlH10).
+
+
+---
+
 ## Future Enhancements
-- **Text-to-Speech Integration**: Convert decoded text into speech for auditory feedback.
 - **Customizable Blink Thresholds**: Allow users to personalize blink duration settings.
-- **Support for Additional Languages**: Expand Morse code support to include other alphabets and symbols.
+- **Multilingual Support**: Expand Morse code support to include other alphabets and symbols.
 
 ---
 
@@ -112,7 +117,7 @@ This project is licensed under the MIT License. See the LICENSE file for more de
 ---
 
 ## Acknowledgments
-- **OpenCV and cvzone**: For providing the foundational tools for real-time video processing.
-- **The Morse Code Community**: For keeping this historic communication method alive.
-- **Contributors and Testers**: For their invaluable feedback in improving the application.
-
+- **OpenCV and cvzone**: For providing the core tools for video processing and facial feature detection.
+- **pyttsx3**: For enabling offline text-to-speech functionality.
+- **Morse Code Community**: For preserving the legacy of Morse code as a means of communication.
+- **Testers and Contributors**: For their invaluable feedback and support in improving the application.

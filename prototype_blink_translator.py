@@ -30,10 +30,9 @@ morse_code_dict = {
 }
 
 # Initialize variables
-idList = [22, 23, 24, 26, 110, 157, 158, 159, 160, 161, 130, 243]
+idList = [159, 23, 130, 243, 386, 253, 362, 359]  # Both eyes landmarks
 ratioList = []
 blinkCounter = 0
-counter = 0
 color = (255, 0, 255)
 blink_start_time = None
 dot_threshold = 350  # Short blink threshold in milliseconds (dot)
@@ -79,13 +78,9 @@ def record_blink(start_time):
 
 def morse_to_text(morse_code):
     inverted_dict = {value: key for key, value in morse_code_dict.items()}
-    words = morse_code.strip().split(' / ')
     decoded_message = ''
-    for word in words:
-        characters = word.split(' ')
-        for char in characters:
-            decoded_message += inverted_dict.get(char, '?')
-        decoded_message += ' '
+    for code in morse_code.split():
+        decoded_message += inverted_dict.get(code, '?')
     return decoded_message.strip()
 
 
@@ -100,36 +95,61 @@ while True:
 
     if faces:
         face = faces[0]
-        for id in idList:
-            cv2.circle(img, face[id], 5, color, cv2.FILLED)
 
+        # Landmarks for the left eye
         leftUp = face[159]
         leftDown = face[23]
         leftLeft = face[130]
         leftRight = face[243]
-        lenghtVer, _ = detector.findDistance(leftUp, leftDown)
-        lenghtHor, _ = detector.findDistance(leftLeft, leftRight)
 
-        cv2.line(img, leftUp, leftDown, (0, 200, 0), 3)
-        cv2.line(img, leftLeft, leftRight, (0, 200, 0), 3)
+        # Landmarks for the right eye
+        rightUp = face[386]
+        rightDown = face[253]
+        rightLeft = face[362]
+        rightRight = face[359]
 
-        ratio = int((lenghtVer / lenghtHor) * 100)
+        # Calculate vertical and horizontal distances for the left eye
+        leftLenghtVer, _ = detector.findDistance(leftUp, leftDown)
+        leftLenghtHor, _ = detector.findDistance(leftLeft, leftRight)
+
+        # Calculate vertical and horizontal distances for the right eye
+        rightLenghtVer, _ = detector.findDistance(rightUp, rightDown)
+        rightLenghtHor, _ = detector.findDistance(rightLeft, rightRight)
+
+        # Draw lines for the left eye
+        cv2.line(img, leftUp, leftDown, (0, 255, 0), 2)  # Vertical line
+        cv2.line(img, leftLeft, leftRight, (0, 255, 0), 2)  # Horizontal line
+
+        # Draw lines for the right eye
+        cv2.line(img, rightUp, rightDown, (0, 255, 0), 2)  # Vertical line
+        cv2.line(img, rightLeft, rightRight, (0, 255, 0), 2)  # Horizontal line
+
+        # Calculate the blink ratios for both eyes
+        leftRatio = leftLenghtVer / leftLenghtHor
+        rightRatio = rightLenghtVer / rightLenghtHor
+
+        # Average the blink ratios of both eyes
+        blinkRatio = (leftRatio + rightRatio) / 2
+
+        # Convert to percentage and append to ratio list
+        ratio = int(blinkRatio * 100)
         ratioList.append(ratio)
         if len(ratioList) > 3:
             ratioList.pop(0)
         ratioAvg = sum(ratioList) / len(ratioList)
 
+        # Blink detection logic (same as before)
         if ratioAvg < 35 and not eyes_closed:  # Eyes are now closed
-            eyes_closed = True  # Set eyes_closed flag
-            blink_start_time = time.time()  # Start measuring blink duration
+            eyes_closed = True
+            blink_start_time = time.time()
             color = (0, 200, 0)
             blinkCounter += 1
 
         elif ratioAvg >= 35 and eyes_closed:  # Eyes have reopened
-            eyes_closed = False  # Reset eyes_closed flag
+            eyes_closed = False
             if blink_start_time is not None:
-                record_blink(blink_start_time)  # Record blink duration after eyes reopen
-                last_blink_time = current_time  # Record time of this blink
+                record_blink(blink_start_time)
+                last_blink_time = current_time
                 blink_start_time = None
             color = (255, 0, 255)
 
@@ -146,7 +166,11 @@ while True:
                 tts_engine.runAndWait()
 
                 blinks = []  # Clear the list for the next letter
-            last_blink_time = None  # Reset after decoding
+            last_blink_time = None
+
+        # Draw circles for left and right eye landmarks
+        for id in idList:
+            cv2.circle(img, face[id], 5, color, cv2.FILLED)
 
         cvzone.putTextRect(img, f'Blink Count: {blinkCounter}', (50, 100), colorR=color)
 
@@ -157,8 +181,7 @@ while True:
         img = cv2.resize(img, (640, 360))
         imgStack = cvzone.stackImages([img, img], 2, 1)
 
-    cv2.imshow("Image", imgStack)
-    
+    cv2.imshow("Blink Translator", imgStack)
     if cv2.waitKey(25) & 0xFF == ord('q'):
         break
 
