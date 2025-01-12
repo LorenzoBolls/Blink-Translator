@@ -1,5 +1,23 @@
 # Blink Translator App
 
+## Table of Contents
+- [Overview](#overview)
+- [Features](#features)
+- [Key Technologies](#key-technologies)
+- [How It Works](#how-it-works)
+- [Setup and Installation](#setup-and-installation)
+  - [Prerequisites](#prerequisites)
+  - [Dependencies](#dependencies)
+  - [Running the Application](#running-the-application)
+- [Usage](#usage)
+- [Examples](#examples)
+- [Demo](#demo)
+- [Future Enhancements](#future-enhancements)
+- [Contributions](#contributions)
+  - [Guidelines](#guidelines)
+- [License](#license)
+- [Acknowledgments](#acknowledgments)
+
 ## Overview
 The Blink Translator App is a **Computer Vision application** designed to assist individuals with paralysis by translating **blinks** into **Morse code** and then into **alphanumeric characters**. Using real-time video from a webcam, the app detects eye blinks, calculates their duration, and converts them into meaningful text. This innovative tool empowers users to communicate effectively, offering a new level of independence.
 
